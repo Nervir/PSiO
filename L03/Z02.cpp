@@ -19,11 +19,8 @@ void print(std::list<int> l) {
 int main()
 {
     const int n = 10;
-    std::list<int> numbers;
-
-    for (int i = 0; i < n; i++) {
-        numbers.emplace_back(randomInt(15, 20));
-    }
+    std::list<int> numbers(n);
+    std::generate(numbers.begin(), numbers.end(), []() { return randomInt(-20, 20); });;
 
     //for (int i = 0; i < numbers.size(); i++) {
     //    std::cout << numbers[i] << ", ";
