@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 struct TempData
 {
@@ -19,6 +20,7 @@ struct TempData
     double height;
     double room113_temp;
 };
+
 void print_temp_data(const std::vector<TempData>& data) {
     for (int i = 0; i < size(data); i++) {
         {std::cout << data[i].date
@@ -39,20 +41,10 @@ void print_temp_data(const std::vector<TempData>& data) {
     }
 }
 
-void sort_temp(std::vector<TempData>& data) {
-    bool change;
-    do {
-        change = false;
-        for (int i = 0; i < data.size() - 1; i++) {
-            if (data[i].temp > data[i + 1].temp) {
-                TempData temp = data[i + 1];
-                data[i + 1] = data[i];
-                data[i] = temp;
-                change = true;
-            }
-        }
-    } while (change == true);
+bool compare_temps(const TempData& first, const TempData& second) {
+    return first.temp > second.temp;
 }
+
 int main()
 {
     std::ifstream file("temp02-2020.csv");
@@ -108,12 +100,12 @@ int main()
                                     wind_speed_mps,
                                     direction,
                                     height,
-                                    room113_temp 
+                                    room113_temp
         };
         temp_data.emplace_back(interim);
     }
 
-    sort_temp(temp_data);
+    std::sort(temp_data.begin(), temp_data.end(), compare_temps);
     print_temp_data(temp_data);
 
     std::cout << "Highest temp: " << temp_data[temp_data.size() - 1].temp << std::endl;
